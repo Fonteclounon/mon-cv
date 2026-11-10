@@ -1,438 +1,62 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Joyeux Anniversaire Maman ! 💖</title>
-  
-  <!-- Polices Google Fonts pour un style élégant -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-  
-  <!-- Librairie JavaScript pour l'effet confettis -->
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
-  <!-- ==================== 1. STYLES CSS ==================== -->
-  <style>
-    :root {
-      --primary: #ff6b8b;
-      --primary-hover: #e05371;
-      --accent: #ffd700;
-      --bg-gradient: linear-gradient(135deg, #fff0f5 0%, #ffd1dc 100%);
-      --text-color: #4a3e43;
-      --white-transparent: rgba(255, 255, 255, 0.95);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: var(--bg-gradient);
-      color: var(--text-color);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    /* Canvas transparent pour l'effet paillettes sous le curseur */
-    #sparkle-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 9999;
-    }
-
-    /* En-tête principal */
-    header {
-      background: linear-gradient(135deg, #ff8da1 0%, #ff6b8b 100%);
-      color: white;
-      text-align: center;
-      padding: 80px 20px 60px;
-      border-bottom-left-radius: 50% 20px;
-      border-bottom-right-radius: 50% 20px;
-      box-shadow: 0 10px 30px rgba(255, 107, 139, 0.3);
-    }
-
-    header h1 {
-      font-family: 'Dancing Script', cursive;
-      font-size: 4rem;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
-      margin-bottom: 10px;
-    }
-
-    header p {
-      font-size: 1.2rem;
-      font-weight: 300;
-      opacity: 0.95;
-    }
-
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 40px 20px;
-    }
-
-    .section-title {
-      font-family: 'Dancing Script', cursive;
-      font-size: 2.8rem;
-      text-align: center;
-      color: #d81b60;
-      margin: 40px 0 20px;
-    }
-
-    /* Galerie Photo */
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 25px;
-      margin-top: 20px;
-    }
-
-    .photo-card {
-      background: var(--white-transparent);
-      border-radius: 20px;
-      padding: 12px;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-      transition: transform 0.4s ease, box-shadow 0.4s ease;
-      overflow: hidden;
-      cursor: pointer;
-    }
-
-    .photo-card:hover {
-      transform: translateY(-10px) scale(1.02);
-      box-shadow: 0 15px 30px rgba(255, 107, 139, 0.3);
-    }
-
-    .photo-card img {
-      width: 100%;
-      height: 300px;
-      object-fit: cover;
-      border-radius: 15px;
-    }
-
-    .photo-card .caption {
-      text-align: center;
-      padding: 12px 5px 5px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: #6a4c58;
-    }
-
-    /* Lettre d'amour avec zone de cœurs qui fondent */
-    .letter-card {
-      background: var(--white-transparent);
-      border-radius: 25px;
-      padding: 50px 40px;
-      max-width: 800px;
-      margin: 40px auto;
-      box-shadow: 0 15px 35px rgba(255, 107, 139, 0.15);
-      border: 2px solid #ffe6ea;
-      line-height: 1.9;
-      position: relative;
-      overflow: hidden;
-      text-align: left;
-    }
-
-    .letter-card h3 {
-      font-family: 'Dancing Script', cursive;
-      font-size: 2.5rem;
-      color: #d81b60;
-      margin-bottom: 20px;
-      text-align: center;
-      position: relative;
-      z-index: 1;
-    }
-
-    .letter-card p {
-      margin-bottom: 18px;
-      font-size: 1.05rem;
-      color: #4a3e43;
-      position: relative;
-      z-index: 1;
-    }
-
-    .letter-card .signature {
-      text-align: right;
-      font-weight: 600;
-      margin-top: 30px;
-      color: #ff6b8b;
-      font-size: 1.1rem;
-      position: relative;
-      z-index: 1;
-    }
-
-    .letter-card .signature span {
-      font-family: 'Dancing Script', cursive;
-      font-size: 1.8rem;
-      color: #d81b60;
-      display: block;
-      margin-top: 5px;
-    }
-
-    /* Animation des cœurs qui fondent */
-    .melting-heart {
-      position: absolute;
-      bottom: -20px;
-      pointer-events: none;
-      font-size: 1.5rem;
-      color: rgba(255, 107, 139, 0.6);
-      animation: floatAndMelt 4s ease-in forwards;
-      z-index: 0;
-    }
-
-    @keyframes floatAndMelt {
-      0% {
-        transform: translateY(0) scale(1) rotate(0deg);
-        opacity: 0.8;
-        filter: blur(0px);
-      }
-      50% {
-        opacity: 0.6;
-        filter: blur(1px);
-      }
-      100% {
-        transform: translateY(-280px) scale(1.8) rotate(15deg);
-        opacity: 0;
-        filter: blur(6px);
-      }
-    }
-
-    /* Bouton Surprise */
-    .interactive-zone {
-      text-align: center;
-      margin: 50px 0;
-    }
-
-    .btn-surprise {
-      background: linear-gradient(45deg, #ff6b8b, #ff8da1);
-      color: white;
-      border: none;
-      padding: 18px 40px;
-      font-size: 1.3rem;
-      font-weight: 600;
-      border-radius: 50px;
-      cursor: pointer;
-      box-shadow: 0 8px 25px rgba(255, 107, 139, 0.4);
-      transition: all 0.3s ease;
-    }
-
-    .btn-surprise:hover {
-      background: linear-gradient(45deg, #e05371, #ff6b8b);
-      transform: scale(1.06);
-      box-shadow: 0 12px 30px rgba(255, 107, 139, 0.6);
-    }
-
-    footer {
-      text-align: center;
-      padding: 30px;
-      font-size: 0.9rem;
-      color: #8a6d79;
-    }
-
-    @media (max-width: 600px) {
-      header h1 { font-size: 2.8rem; }
-      .letter-card { padding: 30px 20px; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mon-cv</title>
+    <link rel="stylesheet"href="style.css">
 </head>
 <body>
-
-  <canvas id="sparkle-canvas"></canvas>
-
-  <!-- ==================== 2. STRUCTURE HTML ==================== -->
-  
-  <header>
-    <h1>Joyeux Anniversaire Maman ! ✨</h1>
-    <p>Une journée remplie d'amour, de joie et de douceur juste pour toi.</p>
-  </header>
-
-  <div class="container">
     
-    <!-- Galerie Photo -->
-    <h2 class="section-title">Nos plus beaux souvenirs</h2>
-    <div class="gallery">
-      <div class="photo-card" onclick="triggerHearts()">
-        <img src="images/WhatsApp Image 2026-11-09 at 19.04.26.jpeg" alt="Photo 1" onerror="this.src='https://picsum.photos/400/500?random=1'">
-        <div class="caption">Ton sourire éclatant 💕</div>
-      </div>
-      <div class="photo-card" onclick="triggerHearts()">
-        <img src="images/WhatsApp Image 2026-11-09 at 19.04.27.jpeg" alt="Photo 2" onerror="this.src='https://picsum.photos/400/500?random=2'">
-        <div class="caption">Des moments inoubliables 🌸</div>
-      </div>
-      <div class="photo-card" onclick="triggerHearts()">
-        <img src="images/WhatsApp Image 2026-11-09 at 19.08.36.jpeg" alt="Photo 3" onerror="this.src='https://picsum.photos/400/500?random=3'">
-        <div class="caption">Une maman formidable ✨</div>
-      </div>
-    </div>
 
-    <!-- Lettre avec Cœurs Animés -->
-    <h2 class="section-title">Un mot du cœur</h2>
-    <div class="letter-card">
-      <h3>Ma très chère Maman,</h3>
-      
-      <p>
-        En ce jour si unique qui célèbre ta naissance, les mots semblent bien légers pour exprimer toute la gratitude et l'amour infini que j'ai pour toi. Tu es le pilier de notre famille, le phare qui illumine nos journées et le havre de paix où l'on trouve toujours refuge et réconfort.
-      </p>
-      
-      <p>
-        Depuis toujours, tu offres sans jamais compter : ta tendresse, ta patience inépuisable, ton écoute bienveillante et tes conseils éclairés. Ton sourire a ce pouvoir magique d'apaiser les inquiétudes et de rendre chaque moment plus doux. À travers tes gestes du quotidien et ton amour inconditionnel, tu nous montres chaque jour ce que signifie aimer sincèrement.
-      </p>
-      
-      <p>
-        Merci pour chaque sacrifice invisible, pour chaque rire partagé, pour tes câlins réconfortants et pour cette force calme que tu transmets autour de toi. Avoir une mère comme toi est la plus grande des bénédictions.
-      </p>
-      
-      <p>
-        Pour cette nouvelle année de ta vie, je te souhaite tout le bonheur du monde : une santé de fer, une joie éclatante et la réalisation de tes rêves les plus chers. Que chaque journée t'apporte autant de douceur et de lumière que tu en diffuses autour de toi.
-      </p>
-      
-      <p class="signature">
-        Joyeux anniversaire à la plus merveilleuse des mamans.<br>
-        <span>Je t'aime du plus profond de mon cœur ❤️</span>
-      </p>
-    </div>
+    
+    <header>
+        <h1>FONTECLOUNON Séréna</h1>
+        <p>Développeur Web / Étudiant en Informatique</p>
+    </header>
 
-    <!-- Bouton Surprise -->
-    <div class="interactive-zone">
-      <button class="btn-surprise" onclick="launchBigCelebration()">Clique pour ta surprise ! 🎉</button>
-    </div>
-
-  </div>
-
-  <footer>
-    Fait avec tout mon amour pour l'anniversaire de Maman ❤️
-  </footer>
-
-  <!-- ==================== 3. SCRIPTS JAVASCRIPT ==================== -->
-  <script>
-    // 1. Confettis
-    function launchBigCelebration() {
-      confetti({
-        particleCount: 150,
-        spread: 90,
-        origin: { y: 0.6 },
-        colors: ['#ff6b8b', '#ffb6c1', '#ffd700', '#ffffff', '#ff1493']
-      });
-
-      setTimeout(() => {
-        confetti({
-          particleCount: 80,
-          angle: 60,
-          spread: 55,
-          origin: { x: 0 },
-          colors: ['#ff6b8b', '#ffd700']
-        });
-        confetti({
-          particleCount: 80,
-          angle: 120,
-          spread: 55,
-          origin: { x: 1 },
-          colors: ['#ff6b8b', '#ffd700']
-        });
-      }, 250);
-    }
-
-    function triggerHearts() {
-      confetti({
-        particleCount: 40,
-        spread: 60,
-        origin: { y: 0.7 },
-        colors: ['#ff6b8b', '#ff1493', '#ffffff']
-      });
-    }
-
-    window.addEventListener('load', () => {
-      setTimeout(launchBigCelebration, 500);
-      createMeltingHearts();
-    });
-
-    // 2. Cœurs qui fondent sous la lettre
-    function createMeltingHearts() {
-      const letterCard = document.querySelector('.letter-card');
-      if (!letterCard) return;
-
-      setInterval(() => {
-        const heart = document.createElement('div');
-        heart.classList.add('melting-heart');
+    <main>
         
-        const hearts = ['💖', '💗', '💕', '🌸', '❤️'];
-        heart.innerText = hearts[Math.floor(Math.random() * hearts.length)];
+        <section id="description">
+            <h2>À propos</h2>
+            <p>Étudiant passionné par le numérique et le développement web, à la recherche d'opportunités pour mettre en pratique mes compétences.</p>
+        </section>
+
         
-        const rect = letterCard.getBoundingClientRect();
-        const randomX = Math.random() * (rect.width - 40);
-        heart.style.left = randomX + 'px';
+        <section id="formations">
+            <h2>Formations</h2>
+            <ul>
+                <li>
+                    <strong>Informatique</strong> - Licence 2 Groupe2
+                </li>
+            </ul>
+        </section>
+
         
-        const randomSize = Math.random() * 1.2 + 0.8;
-        const randomDuration = Math.random() * 2 + 3;
-        heart.style.fontSize = randomSize + 'rem';
-        heart.style.animationDuration = randomDuration + 's';
+        <section id="experiences">
+            <h2>Création graphique</h2>
+            
+                
+        </section>
 
-        letterCard.appendChild(heart);
+    
+        <section id="competences">
+        <h2>Compétences</h2>
+        <ul>
+            <li>HTML, CSS, Git, GitHub</li>
+            <li>Travail en équipe, Rigueur</li>
+        </ul>
+    </section>
 
-        setTimeout(() => {
-          heart.remove();
-        }, randomDuration * 1000);
-      }, 400);
-    }
-
-    // 3. Paillettes sous le curseur
-    const canvas = document.getElementById('sparkle-canvas');
-    const ctx = canvas.getContext('2d');
-    let particles = [];
-
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    window.addEventListener('mousemove', (e) => {
-      for (let i = 0; i < 2; i++) {
-        particles.push({
-          x: e.clientX,
-          y: e.clientY,
-          size: Math.random() * 5 + 2,
-          color: ['#ff6b8b', '#ffd700', '#ffb6c1'][Math.floor(Math.random() * 3)],
-          vx: (Math.random() - 0.5) * 2,
-          vy: (Math.random() - 0.5) * 2,
-          alpha: 1
-        });
-      }
-    });
-
-    function animateSparkles() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      for (let i = 0; i < particles.length; i++) {
-        let p = particles[i];
-        p.x += p.vx;
-        p.y += p.vy;
-        p.alpha -= 0.02;
-
-        ctx.save();
-        ctx.globalAlpha = Math.max(0, p.alpha);
-        ctx.fillStyle = p.color;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-
-        if (p.alpha <= 0) {
-          particles.splice(i, 1);
-          i--;
-        }
-      }
-      requestAnimationFrame(animateSparkles);
-    }
-    animateSparkles();
-  </script>
+    <section id="associations">
+        <h2>Associations</h2>
+        <ul>
+            <li><strong>Enfancee pour tous</strong> - Bénévole aider les enfant (2024-2025)</li>
+        </ul>
+    </section>
+    
+       
+    
+    </main>
 </body>
 </html>
